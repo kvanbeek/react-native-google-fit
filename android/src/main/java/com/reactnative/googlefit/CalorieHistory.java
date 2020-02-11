@@ -11,7 +11,7 @@
 package com.reactnative.googlefit;
 
 import android.os.AsyncTask;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
@@ -22,6 +22,7 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.google.android.gms.fitness.Fitness;
+import com.google.android.gms.fitness.FitnessActivities;
 import com.google.android.gms.fitness.data.Bucket;
 import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
@@ -64,7 +65,7 @@ public class CalorieHistory {
         //Check how much calories were expended in specific days.
         DataReadRequest readRequest = new DataReadRequest.Builder()
                 .aggregate(DataType.TYPE_CALORIES_EXPENDED, DataType.AGGREGATE_CALORIES_EXPENDED)
-                .bucketByTime(1, TimeUnit.DAYS)
+                .bucketByActivityType(1, TimeUnit.MILLISECONDS)
                 .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
                 .build();
 
@@ -78,8 +79,10 @@ public class CalorieHistory {
             Log.i(TAG, "Number of buckets: " + dataReadResult.getBuckets().size());
             for (Bucket bucket : dataReadResult.getBuckets()) {
                 List<DataSet> dataSets = bucket.getDataSets();
-                for (DataSet dataSet : dataSets) {
+                if(!bucket.getActivity().equals(FitnessActivities.STILL) && !bucket.getActivity().equals(FitnessActivities.UNKNOWN)) {
+                  for (DataSet dataSet : dataSets) {
                     processDataSet(dataSet, map, basalCalculation);
+                  }
                 }
             }
         }
