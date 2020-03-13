@@ -11,6 +11,7 @@ class RNGoogleFit {
   isAuthorized = false
 
   authorize = async (options = {}) => {
+    console.log('AUTHORIZE')
     const successResponse = { success: true }
     try {
       await this.checkIsAuthorized()
@@ -44,6 +45,7 @@ class RNGoogleFit {
   }
 
   checkIsAuthorized = async () => {
+    console.log('CHECK IS AUTHORIZED')
     const { isAuthorized } = await googleFit.isAuthorized()
     this.isAuthorized = isAuthorized
   }
@@ -281,6 +283,7 @@ class RNGoogleFit {
    */
 
   getWeightSamples = (options, callback) => {
+    console.log('****** GET WEIGHT SAMPLES *******')
     const startDate = !isNil(options.startDate)
       ? Date.parse(options.startDate)
       : new Date().setHours(0, 0, 0, 0)
