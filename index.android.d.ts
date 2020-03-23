@@ -110,6 +110,11 @@ declare module 'react-native-google-fit' {
       callback: (isError: boolean, result: any) => void
     ) => void
 
+    getGlucoseSamples: (
+      options: any,
+      callback: (isError: boolean, result: any) => void
+    ) => void
+
     getBloodPressureSamples: (
       options: any,
       callback: (isError: boolean, result: any) => void

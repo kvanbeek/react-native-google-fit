@@ -11,7 +11,6 @@ class RNGoogleFit {
   isAuthorized = false
 
   authorize = async (options = {}) => {
-    console.log('AUTHORIZE')
     const successResponse = { success: true }
     try {
       await this.checkIsAuthorized()
@@ -45,7 +44,6 @@ class RNGoogleFit {
   }
 
   checkIsAuthorized = async () => {
-    console.log('CHECK IS AUTHORIZED')
     const { isAuthorized } = await googleFit.isAuthorized()
     this.isAuthorized = isAuthorized
   }
@@ -283,7 +281,6 @@ class RNGoogleFit {
    */
 
   getWeightSamples = (options, callback) => {
-    console.log('****** GET WEIGHT SAMPLES *******')
     const startDate = !isNil(options.startDate)
       ? Date.parse(options.startDate)
       : new Date().setHours(0, 0, 0, 0)
@@ -472,6 +469,26 @@ class RNGoogleFit {
           callback(false, prepareResponse(res, 'value'))
         } else {
           callback('There is no any heart rate data for this period', false)
+        }
+      }
+    )
+  }
+
+  getGlucoseSamples(options, callback) {
+    console.log('INDEX ANDROID GET GLUCOSE SAMPLES: ', googleFit);
+    const startDate = Date.parse(options.startDate)
+    const endDate = Date.parse(options.endDate)
+    googleFit.getGlucoseSamples(
+      startDate,
+      endDate,
+      msg => {
+        callback(msg, false)
+      },
+      res => {
+        if (res.length > 0) {
+          callback(false, prepareResponse(res, 'value'))
+        } else {
+          callback('There is not any glucose data for this period', false)
         }
       }
     )
